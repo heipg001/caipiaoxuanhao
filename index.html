@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦想还是要有的万一实现了呢</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .container {
+            display: block;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        .lottery-section {
+            margin-bottom: 40px;
+        }
+        .numbers {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .number {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 50%;
+            background-color: #ff6666;
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .blue {
+            background-color: #6666ff;
+        }
+        .yellow {
+            background-color: #ffcc00;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>梦想还是要有的万一实现了呢</h1>
+    <div class="container">
+        <!-- 双色球部分 -->
+        <div class="lottery-section">
+            <h2>双色球</h2>
+            <div class="numbers" id="ssqNumbers">
+                <!-- 双色球号码将在这里显示 -->
+            </div>
+            <button onclick="generateSSQ()">生成双色球号码</button>
+            <button onclick="copySSQ()">一键复制双色球号码</button>
+        </div>
+
+        <!-- 大乐透部分 -->
+        <div class="lottery-section">
+            <h2>大乐透</h2>
+            <div class="numbers" id="dltNumbers">
+                <!-- 大乐透号码将在这里显示 -->
+            </div>
+            <button onclick="generateDLT()">生成大乐透号码</button>
+            <button onclick="copyDLT()">一键复制大乐透号码</button>
+        </div>
+    </div>
+
+    <script>
+        // 双色球相关变量
+        let ssqNumbers = '';
+
+        // 大乐透相关变量
+        let dltNumbers = '';
+
+        // 生成双色球号码
+        function generateSSQ() {
+            // 生成6个不重复的红球（1-33）
+            let redBalls = [];
+            while (redBalls.length < 6) {
+                let num = Math.floor(Math.random() * 33) + 1;
+                if (!redBalls.includes(num)) {
+                    redBalls.push(num);
+                }
+            }
+            redBalls.sort((a, b) => a - b);
+
+            // 生成1个蓝球（1-16）
+            let blueBall = Math.floor(Math.random() * 16) + 1;
+
+            // 显示号码
+            let numbersDiv = document.getElementById('ssqNumbers');
+            numbersDiv.innerHTML = '';
+
+            redBalls.forEach(num => {
+                let numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.textContent = num;
+                numbersDiv.appendChild(numberDiv);
+            });
+
+            let blueDiv = document.createElement('div');
+            blueDiv.className = 'number blue';
+            blueDiv.textContent = blueBall;
+            numbersDiv.appendChild(blueDiv);
+
+            // 将号码保存为字符串
+            ssqNumbers = `双色球号码：红球：${redBalls.join(', ')}，蓝球：${blueBall}`;
+        }
+
+        // 复制双色球号码
+        function copySSQ() {
+            if (!ssqNumbers) {
+                alert('请先生成双色球号码！');
+                return;
+            }
+
+            // 复制到剪切板
+            navigator.clipboard.writeText(ssqNumbers)
+                .then(() => {
+                    alert('双色球号码已复制到剪切板！祝你中一等奖！');
+                })
+                .catch(() => {
+                    alert('复制失败，请手动复制！');
+                });
+        }
+
+        // 生成大乐透号码
+        function generateDLT() {
+            // 生成5个不重复的前区号码（1-35）
+            let frontBalls = [];
+            while (frontBalls.length < 5) {
+                let num = Math.floor(Math.random() * 35) + 1;
+                if (!frontBalls.includes(num)) {
+                    frontBalls.push(num);
+                }
+            }
+            frontBalls.sort((a, b) => a - b);
+
+            // 生成2个不重复的后区号码（1-12）
+            let backBalls = [];
+            while (backBalls.length < 2) {
+                let num = Math.floor(Math.random() * 12) + 1;
+                if (!backBalls.includes(num)) {
+                    backBalls.push(num);
+                }
+            }
+            backBalls.sort((a, b) => a - b);
+
+            // 显示号码
+            let numbersDiv = document.getElementById('dltNumbers');
+            numbersDiv.innerHTML = '';
+
+            frontBalls.forEach(num => {
+                let numberDiv = document.createElement('div');
+                numberDiv.className = 'number';
+                numberDiv.textContent = num;
+                numbersDiv.appendChild(numberDiv);
+            });
+
+            backBalls.forEach(num => {
+                let numberDiv = document.createElement('div');
+                numberDiv.className = 'number yellow';
+                numberDiv.textContent = num;
+                numbersDiv.appendChild(numberDiv);
+            });
+
+            // 将号码保存为字符串
+            dltNumbers = `大乐透号码：前区：${frontBalls.join(', ')}，后区：${backBalls.join(', ')}`;
+        }
+
+        // 复制大乐透号码
+        function copyDLT() {
+            if (!dltNumbers) {
+                alert('请先生成大乐透号码！');
+                return;
+            }
+
+            // 复制到剪切板
+            navigator.clipboard.writeText(dltNumbers)
+                .then(() => {
+                    alert('大乐透号码已复制到剪切板！祝你中一等奖！');
+                })
+                .catch(() => {
+                    alert('复制失败，请手动复制！');
+                });
+        }
+
+        // 页面加载时自动生成一次号码
+        window.onload = () => {
+            generateSSQ();
+            generateDLT();
+        };
+    </script>
+</body>
+</html>
